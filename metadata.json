@@ -1,0 +1,6 @@
+{
+  "name": "KahootLive - Gerçek Zamanlı Bilgi Yarışması",
+  "description": "Kahoot tarzı, anlık skor tablolu, QR kod katılımcı girişli, eğlenceli ve gerçek zamanlı çok oyunculu yarışma platformu.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
