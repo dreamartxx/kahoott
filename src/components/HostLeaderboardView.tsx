@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { ArrowRight, Flame, Trophy, Award, Crown } from 'lucide-react';
-import type { RoomState } from '../types/quiz.js';
-import { sounds } from '../utils/soundEffects.js';
+import type { RoomState } from '../types/quiz';
+import { sounds } from '../utils/soundEffects';
 
 interface HostLeaderboardViewProps {
   room: RoomState;

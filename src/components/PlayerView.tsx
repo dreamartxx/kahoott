@@ -1,7 +1,7 @@
 import React from 'react';
 import { CheckCircle2, XCircle, Trophy, Sparkles, Clock, Flame, Award } from 'lucide-react';
-import type { RoomState, Player } from '../types/quiz.js';
-import { KAHOOT_THEMES } from '../utils/quizTheme.js';
+import type { RoomState, Player } from '../types/quiz';
+import { KAHOOT_THEMES } from '../utils/quizTheme';
 
 interface PlayerViewProps {
   room: RoomState;

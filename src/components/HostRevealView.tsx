@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { CheckCircle2, XCircle, ArrowRight, Lightbulb, Users } from 'lucide-react';
-import type { RoomState } from '../types/quiz.js';
-import { KAHOOT_THEMES } from '../utils/quizTheme.js';
-import { sounds } from '../utils/soundEffects.js';
+import type { RoomState } from '../types/quiz';
+import { KAHOOT_THEMES } from '../utils/quizTheme';
+import { sounds } from '../utils/soundEffects';
 
 interface HostRevealViewProps {
   room: RoomState;

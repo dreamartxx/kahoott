@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Copy, Check, Play, Users, QrCode, Sparkles, X, Volume2, VolumeX, Maximize2 } from 'lucide-react';
-import { QRCodeDisplay } from './QRCodeDisplay.js';
-import type { RoomState } from '../types/quiz.js';
-import { sounds } from '../utils/soundEffects.js';
+import { QRCodeDisplay } from './QRCodeDisplay';
+import type { RoomState } from '../types/quiz';
+import { sounds } from '../utils/soundEffects';
 
 interface HostLobbyProps {
   room: RoomState;

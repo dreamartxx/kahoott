@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Play, Sparkles, Plus, ArrowRight, Server, Globe, Users, Trophy } from 'lucide-react';
-import type { QuizPack } from '../types/quiz.js';
-import { FUN_AVATARS } from '../utils/quizTheme.js';
+import type { QuizPack } from '../types/quiz';
+import { FUN_AVATARS } from '../utils/quizTheme';
 
 interface HomeLobbyProps {
   quizzes: QuizPack[];

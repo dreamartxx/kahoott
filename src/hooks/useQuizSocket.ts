@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import type { QuizPack, RoomState, Player, WSClientMessage, WSServerMessage } from '../types/quiz.js';
-import { sounds } from '../utils/soundEffects.js';
+import type { QuizPack, RoomState, Player, WSClientMessage, WSServerMessage } from '../types/quiz';
+import { sounds } from '../utils/soundEffects';
 
 export function useQuizSocket() {
   const [isConnected, setIsConnected] = useState(false);

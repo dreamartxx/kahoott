@@ -1,4 +1,4 @@
-import { QuizPack } from '../types/quiz.js';
+import { QuizPack } from '../types/quiz';
 
 export const DEFAULT_QUIZZES: QuizPack[] = [
   {

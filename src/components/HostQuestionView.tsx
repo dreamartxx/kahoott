@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Timer, Users, FastForward, Award } from 'lucide-react';
-import type { RoomState } from '../types/quiz.js';
-import { KAHOOT_THEMES } from '../utils/quizTheme.js';
+import type { RoomState } from '../types/quiz';
+import { KAHOOT_THEMES } from '../utils/quizTheme';
 
 interface HostQuestionViewProps {
   room: RoomState;

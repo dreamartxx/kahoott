@@ -4,19 +4,19 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { useQuizSocket } from './hooks/useQuizSocket.js';
-import { TopNav } from './components/TopNav.js';
-import { HomeLobby } from './components/HomeLobby.js';
-import { HostLobby } from './components/HostLobby.js';
-import { HostQuestionView } from './components/HostQuestionView.js';
-import { HostRevealView } from './components/HostRevealView.js';
-import { HostLeaderboardView } from './components/HostLeaderboardView.js';
-import { HostPodiumView } from './components/HostPodiumView.js';
-import { PlayerView } from './components/PlayerView.js';
-import { QuizCreatorModal } from './components/QuizCreatorModal.js';
-import { HostingerDeployModal } from './components/HostingerDeployModal.js';
-import { DEFAULT_QUIZZES } from './data/defaultQuizzes.js';
-import type { QuizPack } from './types/quiz.js';
+import { useQuizSocket } from './hooks/useQuizSocket';
+import { TopNav } from './components/TopNav';
+import { HomeLobby } from './components/HomeLobby';
+import { HostLobby } from './components/HostLobby';
+import { HostQuestionView } from './components/HostQuestionView';
+import { HostRevealView } from './components/HostRevealView';
+import { HostLeaderboardView } from './components/HostLeaderboardView';
+import { HostPodiumView } from './components/HostPodiumView';
+import { PlayerView } from './components/PlayerView';
+import { QuizCreatorModal } from './components/QuizCreatorModal';
+import { HostingerDeployModal } from './components/HostingerDeployModal';
+import { DEFAULT_QUIZZES } from './data/defaultQuizzes';
+import type { QuizPack } from './types/quiz';
 
 export default function App() {
   const {

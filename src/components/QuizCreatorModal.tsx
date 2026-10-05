@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { X, Plus, Trash2, CheckCircle2, Save, Sparkles, HelpCircle } from 'lucide-react';
-import type { QuizPack, QuizQuestion } from '../types/quiz.js';
-import { KAHOOT_THEMES } from '../utils/quizTheme.js';
+import type { QuizPack, QuizQuestion } from '../types/quiz';
+import { KAHOOT_THEMES } from '../utils/quizTheme';
 
 interface QuizCreatorModalProps {
   isOpen: boolean;

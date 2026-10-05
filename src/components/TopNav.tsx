@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Sparkles, Server, Plus, Volume2, VolumeX } from 'lucide-react';
-import { sounds } from '../utils/soundEffects.js';
+import { sounds } from '../utils/soundEffects';
 
 interface TopNavProps {
   onOpenCreator: () => void;

@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import confetti from 'canvas-confetti';
 import { Trophy, Crown, RotateCcw, Home, Sparkles, Award } from 'lucide-react';
-import type { RoomState, Player } from '../types/quiz.js';
-import { sounds } from '../utils/soundEffects.js';
+import type { RoomState, Player } from '../types/quiz';
+import { sounds } from '../utils/soundEffects';
 
 interface HostPodiumViewProps {
   room: RoomState;

@@ -3,8 +3,8 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import express from 'express';
 import { WebSocketServer, WebSocket } from 'ws';
-import { DEFAULT_QUIZZES } from './src/data/defaultQuizzes.js';
-import type { QuizPack, RoomState, Player, GameStatus, QuizQuestion } from './src/types/quiz.js';
+import { DEFAULT_QUIZZES } from './src/data/defaultQuizzes';
+import type { QuizPack, RoomState, Player, GameStatus, QuizQuestion } from './src/types/quiz';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -607,14 +607,22 @@ async function startServer() {
 
     app.use('*', async (req, res, next) => {
       const url = req.originalUrl;
-      if (url.startsWith('/api') || url.startsWith('/ws')) {
+      // Never intercept API, WebSocket, internal Vite paths, or static assets with file extensions
+      if (
+        url.startsWith('/api') ||
+        url.startsWith('/ws') ||
+        url.startsWith('/@') ||
+        url.startsWith('/src/') ||
+        url.includes('/node_modules/') ||
+        /\.(js|jsx|ts|tsx|css|json|svg|png|jpg|jpeg|gif|ico|woff|woff2|ttf|map)($|\?)/.test(url)
+      ) {
         return next();
       }
       try {
         const indexPath = path.resolve(__dirname, 'index.html');
         let template = fs.readFileSync(indexPath, 'utf-8');
         template = await vite.transformIndexHtml(url, template);
-        res.status(200).set({ 'Content-Type': 'text/html' }).end(template);
+        res.status(200).set({ 'Content-Type': 'text/html; charset=utf-8' }).end(template);
       } catch (e) {
         next(e);
       }
