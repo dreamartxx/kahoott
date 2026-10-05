@@ -20,28 +20,35 @@ export const HostPodiumView: React.FC<HostPodiumViewProps> = ({ room, onRestart,
     sounds.playPodiumFanfare();
 
     // Trigger celebration confetti
-    const duration = 3.5 * 1000;
-    const end = Date.now() + duration;
+    try {
+      const confettiFn = (confetti as unknown as { default?: typeof confetti }).default || confetti;
+      if (typeof confettiFn === 'function') {
+        const duration = 3.5 * 1000;
+        const end = Date.now() + duration;
 
-    const frame = () => {
-      confetti({
-        particleCount: 4,
-        angle: 60,
-        spread: 55,
-        origin: { x: 0, y: 0.7 },
-      });
-      confetti({
-        particleCount: 4,
-        angle: 120,
-        spread: 55,
-        origin: { x: 1, y: 0.7 },
-      });
+        const frame = () => {
+          confettiFn({
+            particleCount: 4,
+            angle: 60,
+            spread: 55,
+            origin: { x: 0, y: 0.7 },
+          });
+          confettiFn({
+            particleCount: 4,
+            angle: 120,
+            spread: 55,
+            origin: { x: 1, y: 0.7 },
+          });
 
-      if (Date.now() < end) {
-        requestAnimationFrame(frame);
+          if (Date.now() < end) {
+            requestAnimationFrame(frame);
+          }
+        };
+        frame();
       }
-    };
-    frame();
+    } catch {
+      // safe fallback
+    }
   }, []);
 
   return (

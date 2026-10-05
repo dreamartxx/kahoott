@@ -587,7 +587,7 @@ ON DUPLICATE KEY UPDATE \`question_text\` = '${qText}';\n`;
 });
 
 // Setup Vite or Static Serving
-const PORT = process.env.PORT || 3000;
+const PORT = Number(process.env.PORT) || 3000;
 
 async function startServer() {
   if (process.env.NODE_ENV === 'production') {
@@ -597,16 +597,32 @@ async function startServer() {
       res.sendFile(path.resolve(distPath, 'index.html'));
     });
   } else {
+    const fs = await import('fs');
     const { createServer: createViteServer } = await import('vite');
     const vite = await createViteServer({
-      server: { middlewareMode: true },
+      server: { middlewareMode: true, hmr: process.env.DISABLE_HMR !== 'true' },
       appType: 'spa',
     });
     app.use(vite.middlewares);
+
+    app.use('*', async (req, res, next) => {
+      const url = req.originalUrl;
+      if (url.startsWith('/api') || url.startsWith('/ws')) {
+        return next();
+      }
+      try {
+        const indexPath = path.resolve(__dirname, 'index.html');
+        let template = fs.readFileSync(indexPath, 'utf-8');
+        template = await vite.transformIndexHtml(url, template);
+        res.status(200).set({ 'Content-Type': 'text/html' }).end(template);
+      } catch (e) {
+        next(e);
+      }
+    });
   }
 
-  server.listen(PORT, () => {
-    console.log(`KahootLive Server is running on port ${PORT}`);
+  server.listen(PORT, '0.0.0.0', () => {
+    console.log(`KahootLive Server is running on port ${PORT} (0.0.0.0)`);
   });
 }
 

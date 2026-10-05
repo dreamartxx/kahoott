@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Sparkles, Server, Plus, Volume2, VolumeX } from 'lucide-react';
 import { sounds } from '../utils/soundEffects.js';
 
@@ -13,7 +13,7 @@ export const TopNav: React.FC<TopNavProps> = ({
   onOpenDeployModal,
   onGoHome,
 }) => {
-  const [isMuted, setIsMuted] = React.useState(sounds.getMuted());
+  const [isMuted, setIsMuted] = useState(sounds.getMuted());
 
   const handleToggleSound = () => {
     const muted = sounds.toggleMute();

@@ -12,21 +12,29 @@ export const QRCodeDisplay: React.FC<QRCodeDisplayProps> = ({ value, size = 180,
 
   useEffect(() => {
     let isMounted = true;
-    QRCode.toDataURL(value, {
-      width: size * 2, // retina 2x
-      margin: 1.5,
-      color: {
-        dark: '#0f172a', // slate-900
-        light: '#ffffff',
-      },
-      errorCorrectionLevel: 'M',
-    })
-      .then((url) => {
-        if (isMounted) setQrSrc(url);
-      })
-      .catch((err) => {
-        console.error('QR Code generation error', err);
-      });
+    try {
+      const qrModule = (QRCode as unknown as { default?: typeof QRCode }).default || QRCode;
+      if (qrModule && typeof qrModule.toDataURL === 'function') {
+        qrModule
+          .toDataURL(value, {
+            width: size * 2,
+            margin: 1.5,
+            color: {
+              dark: '#0f172a',
+              light: '#ffffff',
+            },
+            errorCorrectionLevel: 'M',
+          })
+          .then((url: string) => {
+            if (isMounted) setQrSrc(url);
+          })
+          .catch((err: unknown) => {
+            console.warn('QR Code generation fallback:', err);
+          });
+      }
+    } catch (err) {
+      console.warn('QR Code load note:', err);
+    }
 
     return () => {
       isMounted = false;

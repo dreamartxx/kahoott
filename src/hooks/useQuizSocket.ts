@@ -26,102 +26,109 @@ export function useQuizSocket() {
       return;
     }
 
-    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const host = window.location.host;
-    const wsUrl = `${protocol}//${host}/ws`;
+    try {
+      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+      const host = window.location.host;
+      const wsUrl = `${protocol}//${host}/ws`;
 
-    const ws = new WebSocket(wsUrl);
-    wsRef.current = ws;
+      const ws = new WebSocket(wsUrl);
+      wsRef.current = ws;
 
-    ws.onopen = () => {
-      setIsConnected(true);
-      setErrorMessage(null);
-    };
+      ws.onopen = () => {
+        setIsConnected(true);
+        setErrorMessage(null);
+      };
 
-    ws.onmessage = (event) => {
-      try {
-        const msg: WSServerMessage = JSON.parse(event.data);
+      ws.onmessage = (event) => {
+        try {
+          const msg: WSServerMessage = JSON.parse(event.data);
 
-        switch (msg.type) {
-          case 'ROOM_CREATED':
-            setRoom(msg.payload.room);
-            roleRef.current = 'host';
-            break;
+          switch (msg.type) {
+            case 'ROOM_CREATED':
+              setRoom(msg.payload.room);
+              roleRef.current = 'host';
+              break;
 
-          case 'JOIN_SUCCESS':
-            setMyPlayerId(msg.payload.playerId);
-            setRoom(msg.payload.room);
-            roleRef.current = 'player';
-            setErrorMessage(null);
-            sounds.playPlayerJoin();
-            break;
+            case 'JOIN_SUCCESS':
+              setMyPlayerId(msg.payload.playerId);
+              setRoom(msg.payload.room);
+              roleRef.current = 'player';
+              setErrorMessage(null);
+              sounds.playPlayerJoin();
+              break;
 
-          case 'JOIN_ERROR':
-            setErrorMessage(msg.payload.message);
-            break;
+            case 'JOIN_ERROR':
+              setErrorMessage(msg.payload.message);
+              break;
 
-          case 'ROOM_UPDATE':
-            setRoom((prev) => {
-              // Play join sound if a new player joined while in lobby
-              if (prev && prev.status === 'LOBBY' && msg.payload.players.length > prev.players.length) {
-                sounds.playPlayerJoin();
-              }
-              return msg.payload;
-            });
-            break;
+            case 'ROOM_UPDATE':
+              setRoom((prev) => {
+                // Play join sound if a new player joined while in lobby
+                if (prev && prev.status === 'LOBBY' && msg.payload.players.length > prev.players.length) {
+                  sounds.playPlayerJoin();
+                }
+                return msg.payload;
+              });
+              break;
 
-          case 'COUNTDOWN':
-            setCountdown(msg.payload.seconds);
-            sounds.playTick(500 + (4 - msg.payload.seconds) * 150);
-            break;
+            case 'COUNTDOWN':
+              setCountdown(msg.payload.seconds);
+              sounds.playTick(500 + (4 - msg.payload.seconds) * 150);
+              break;
 
-          case 'QUESTION_START':
-            setCountdown(null);
-            setHasAnswered(false);
-            setSelectedAnswerIndex(null);
-            setLastRoundResult(null);
-            sounds.playTick(880);
-            break;
+            case 'QUESTION_START':
+              setCountdown(null);
+              setHasAnswered(false);
+              setSelectedAnswerIndex(null);
+              setLastRoundResult(null);
+              sounds.playTick(880);
+              break;
 
-          case 'PLAYER_ANSWER_RECEIVED':
-            // Can be used to update live count
-            break;
+            case 'PLAYER_ANSWER_RECEIVED':
+              // Can be used to update live count
+              break;
 
-          case 'ROUND_REVEAL':
-            setLastRoundResult({
-              correctIndex: msg.payload.correctIndex,
-              stats: msg.payload.stats,
-              explanation: msg.payload.explanation,
-            });
-            break;
+            case 'ROUND_REVEAL':
+              setLastRoundResult({
+                correctIndex: msg.payload.correctIndex,
+                stats: msg.payload.stats,
+                explanation: msg.payload.explanation,
+              });
+              break;
 
-          case 'LEADERBOARD_UPDATE':
-            break;
+            case 'LEADERBOARD_UPDATE':
+              break;
 
-          case 'GAME_OVER':
-            sounds.playPodiumFanfare();
-            break;
+            case 'GAME_OVER':
+              sounds.playPodiumFanfare();
+              break;
 
-          case 'ERROR':
-            setErrorMessage(msg.payload.message);
-            break;
+            case 'ERROR':
+              setErrorMessage(msg.payload.message);
+              break;
+          }
+        } catch (err) {
+          console.error('Error parsing WS message', err);
         }
-      } catch (err) {
-        console.error('Error parsing WS message', err);
-      }
-    };
+      };
 
-    ws.onclose = () => {
-      setIsConnected(false);
-      // Auto-reconnect after 2 seconds
-      reconnectTimeoutRef.current = setTimeout(() => {
-        connect();
-      }, 2000);
-    };
+      ws.onclose = () => {
+        setIsConnected(false);
+        // Auto-reconnect after 3 seconds
+        if (reconnectTimeoutRef.current) clearTimeout(reconnectTimeoutRef.current);
+        reconnectTimeoutRef.current = setTimeout(() => {
+          connect();
+        }, 3000);
+      };
 
-    ws.onerror = () => {
+      ws.onerror = (e) => {
+        setIsConnected(false);
+        console.warn('WebSocket connection note:', e);
+      };
+    } catch (err) {
+      console.warn('Could not establish WebSocket connection:', err);
       setIsConnected(false);
-    };
+    }
   }, []);
 
   useEffect(() => {
